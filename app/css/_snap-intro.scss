@@ -1,0 +1,149 @@
+$breakpoints: ( mobile: 768px, tablet: 992px, desktop: 1200px, medium-desktop: 1600px, large-desktop: 1920px);
+
+@function rem($size, $base_size: 16) {
+  @return calc($size/$base_size*1rem);
+}
+
+@mixin screen($breakpoint, $mobileFirst: false) {
+  @if $mobileFirst {
+      @if map-has-key($breakpoints, $breakpoint) {
+          @media (min-width: #{map-get($breakpoints, $breakpoint)}) {
+              @content;
+          }
+      }
+      @else {
+          @media (min-width: $breakpoint) {
+              @content;
+          }
+      }
+  }
+  @else {
+      @if map-has-key($breakpoints, $breakpoint) {
+          @media (max-width: (map-get($breakpoints, $breakpoint) - 1px)) {
+              @content;
+          }
+      }
+      @else {
+          @media (max-width: ($breakpoint - 1px)) {
+              @content;
+          }
+      }
+  }
+}
+
+.snap-intro {
+  position: relative;
+  &.-playing {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #000;
+    z-index: 1;
+  }
+  &__wrapper {
+    position: relative;
+    min-height: 100vh;
+  }
+  &__title {
+    position: absolute;
+    left: 0;
+    top: 52.5%;
+    transform: translate(0%, -50%);
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    opacity: 0;
+    @include screen(desktop) {
+      top: 62%;
+    }
+    &.-title-1 {
+      font-size: 14.6vw;
+      letter-spacing: -0.0210526316em;
+      opacity: 0;
+      @include screen(desktop) {
+        font-size: rem_desktop(136);
+      }
+      @include screen(mobile) {
+        font-size: rem_mb(60);
+      }
+    }
+    &.-title-2 {
+      font-size: rem(120);
+      letter-spacing: -0.0210526316em;
+      line-height: calc(110/120);
+      @include screen(desktop) {
+        top: 50%;
+      }
+      @include screen(mobile) {
+        font-size: rem_mb(52);
+      }
+    }
+  }
+  &__buttons {
+    position: absolute;
+    bottom: 10%;
+    left: 0;
+    right: 0;
+    font-size: rem(22);
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -0.007em;
+    text-align: center;
+    opacity: 0;
+    @include screen(desktop) {
+      bottom: 5%;
+      font-size: rem_desktop(22);
+    }
+    @include screen(mobile) {
+      bottom: 50%;
+      font-size: rem_mb(18);
+      margin-bottom: rem_mb(-220);
+    }
+    a {
+      color: #fff;
+      font-weight: 600;
+      display: inline-block;
+      margin: 0 rem(17);
+      @include screen(desktop) {
+        margin: 0 rem_desktop(17);
+      }
+      @include screen(mobile) {
+        display: block;
+        margin: rem_mb(8);
+      }
+      span {
+        &:after {
+          padding-left: rem_mb(1);
+        }
+      }
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  &__model {
+    position: absolute;
+    z-index: 3;
+    top: 32%;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(-50%);
+    transform-origin: 50% 70%;
+    @include screen(desktop) {
+      top: 38%;
+      width: 106%;
+      margin-left: -3%;
+    }
+    @include screen(mobile) {
+      width: calc(734/430)*100%;
+      margin-left: -35%;
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
